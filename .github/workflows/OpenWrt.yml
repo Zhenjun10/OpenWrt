@@ -1,0 +1,45 @@
+name: 编译OpenWrt并上传固件
+on: push
+
+jobs:
+  openwrt-build:
+    name: OpenWrt 编译
+    runs-on: ubuntu-22.04
+
+    steps:
+    - name: 读取 config 配置文件
+      uses: actions/checkout@v4
+
+    - name: 安装编译环境
+      run: sudo bash -c 'bash <(curl -s https://build-scripts.immortalwrt.org/init_build_environment.sh)'
+
+    - name: 测试
+      run: |
+        echo "===================="
+        echo "系统核心个数: $(nproc)"
+        echo "当前工作目录: $(pwd)"
+        echo "当前目录内容:"
+        ls -aFhl
+        echo "===================="
+
+    - name: 克隆 immortalwrt 的 24.10 版本
+      run: git clone -b openwrt-24.10 --single-branch --filter=blob:none https://github.com/immortalwrt/immortalwrt
+
+    - name: 更新订阅内容和配置文件
+      run: cp config/immortalwrt-master/config immortalwrt/.config
+
+    - name: 更新并安装 immortalwrt 包
+      run: |
+        cd immortalwrt
+        ./scripts/feeds update -a
+        ./scripts/feeds install -a
+        
+    - name: 开始编译 immortalwrt
+      run: |
+        echo "===================="
+        echo "系统核心个数: $(nproc)"
+        echo "当前工作目录: $(pwd)"
+        echo "当前目录内容:"
+        ls -aFhl
+        echo "===================="
+        make -j$(nproc) V=s
