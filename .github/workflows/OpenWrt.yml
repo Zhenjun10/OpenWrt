@@ -32,17 +32,25 @@ jobs:
 
     - name: 更新并安装 immortalwrt 包
       run: |
-        cd immortalwrt
+        cd immortalwrt/
         ./scripts/feeds update -a
         ./scripts/feeds install -a
-        
+
     - name: 开始编译 immortalwrt
       run: |
         echo "===================="
-        echo "系统核心个数: $(nproc)"
         echo "当前工作目录: $(pwd)"
         echo "当前目录内容:"
-        ls -Fhl
+        ls -aFhl
         echo "===================="
         cd immortalwrt/
         make -j$(nproc) V=s
+
+    - name: 测试
+      run: |
+        cd immortalwrt/
+        echo "===================="
+        echo "当前工作目录: $(pwd)"
+        echo "当前目录内容:"
+        ls -aFhl
+        echo "===================="
