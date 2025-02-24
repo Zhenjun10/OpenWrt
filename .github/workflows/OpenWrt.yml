@@ -1,5 +1,8 @@
-name: 编译OpenWrt并上传固件
-on: push
+name: 编译 OpenWrt 并上传固件
+on: 
+  push
+  repository_dispatch:
+  workflow_dispatch:
 
 jobs:
   openwrt-build:
