@@ -37,7 +37,7 @@ jobs:
       run: |
         git clone https://git.openwrt.org/openwrt/openwrt.git
         cd openwrt/
-        git switch v24.10.0 --detech
+        git switch v24.10.0 --detach
 
     - name: 更新订阅内容和配置文件
       run: |
